@@ -1,18 +1,16 @@
-import mysql
+import mysql.connector
 
 def connect():
-    conn = mysql.connect("quantacts.db")
+    conn = mysql.connector.connect(database="mydb")
     cur = conn.cursor()
     cur.execute('''
-        CREATE SCHEMA IF NOT EXISTS `mydb`;
-        USE mydb;
-        CREATE TABLE IF NOT EXISTS (id INTEGER PRIMARY KEY, first text, last text, number text, email text);
+        CREATE TABLE IF NOT EXISTS quantacts (id INTEGER PRIMARY KEY, first text, last text, number text, email text);
     ''')
     conn.commit()
     conn.close()
 
 def insert(first,last,number, email):
-    conn = mysql.connect("quantacts.db")
+    conn = mysql.connector.connect("mydb.db")
     cur = conn.cursor()
     cur.execute(
         '''INSERT INTO quantacts VALUES (NULL,?,?,?)''',(first, last, number, email))
@@ -20,7 +18,7 @@ def insert(first,last,number, email):
     conn.close()
     
 def view():
-    conn = mysql.connect("quantacts.db")
+    conn = mysql.connector.connect(database="mydb.db")
     cur = conn.cursor()
     cur.execute('''
         SELECT * FROM quantacts
@@ -29,7 +27,7 @@ def view():
     conn.close()
     
 def search(first,last,number, email):
-    conn = mysql.connect("quantacts.db")
+    conn = mysql.connector.connect("mydb.db")
     cur = conn.cursor()
     cur.execute(
         '''SELECT * FROM quantacts WHERE first=? OR last=? OR number=? OR email=?''', (first, last, number, email)
@@ -38,7 +36,7 @@ def search(first,last,number, email):
     conn.close()
     
 def delete(variable_id):
-    conn = mysql.connect("quantacts.db")
+    conn = mysql.connector.connect("mydb.db")
     cur = conn.cursor()
     cur.execute(
         '''DELETE FROM quantacts WHERE id=?''', (variable_id)
@@ -47,7 +45,7 @@ def delete(variable_id):
     conn.close()
     
 def update(variable_id,first,last,number, email):
-    conn = mysql.connect("quantacts.db")
+    conn = mysql.connector.connect("mydb.db")
     cur = conn.cursor()
     cur.execute(
         '''UPDATE quantacts SET first=?,last=?,number=?, email=?, where variable_id=?''', 
