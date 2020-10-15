@@ -1,7 +1,7 @@
 import mysql.connector
 
 def connect():
-    conn = mysql.connector.connect(database="mydb")
+    conn = mysql.connector.connect(database="mydb", user ="root", password = "password", host="localhost")
     cur = conn.cursor()
     cur.execute('''
         CREATE TABLE IF NOT EXISTS quantacts (id INTEGER PRIMARY KEY, first text, last text, number text, email text);
@@ -10,15 +10,16 @@ def connect():
     conn.close()
 
 def insert(first,last,number, email):
-    conn = mysql.connector.connect("mydb.db")
+    conn = mysql.connector.connect(database="mydb", user ="root", password = "password", host="localhost")
     cur = conn.cursor()
-    cur.execute(
-        '''INSERT INTO quantacts VALUES (NULL,?,?,?)''',(first, last, number, email))
+    query = f'INSERT INTO quantacts (NULL,?,?,?) VALUES ({first}, {last}, {number}, {email})'
+    query.format( {first:'first'}, {last:'last'}, {number:'number'}, {email:'email'})
+    cur.execute(query)
     conn.commit()
     conn.close()
     
 def view():
-    conn = mysql.connector.connect(database="mydb.db")
+    conn = mysql.connector.connect(database="mydb", user ="root", password = "password", host="localhost")
     cur = conn.cursor()
     cur.execute('''
         SELECT * FROM quantacts
@@ -27,7 +28,7 @@ def view():
     conn.close()
     
 def search(first,last,number, email):
-    conn = mysql.connector.connect("mydb.db")
+    conn = mysql.connector.connect(database="mydb", user ="root", password = "password", host="localhost")
     cur = conn.cursor()
     cur.execute(
         '''SELECT * FROM quantacts WHERE first=? OR last=? OR number=? OR email=?''', (first, last, number, email)
@@ -36,7 +37,7 @@ def search(first,last,number, email):
     conn.close()
     
 def delete(variable_id):
-    conn = mysql.connector.connect("mydb.db")
+    conn = mysql.connector.connect(database="mydb", user ="root", password = "password", host="localhost")
     cur = conn.cursor()
     cur.execute(
         '''DELETE FROM quantacts WHERE id=?''', (variable_id)
@@ -45,7 +46,7 @@ def delete(variable_id):
     conn.close()
     
 def update(variable_id,first,last,number, email):
-    conn = mysql.connector.connect("mydb.db")
+    conn = mysql.connector.connect(database="mydb", user ="root", password = "password", host="localhost")
     cur = conn.cursor()
     cur.execute(
         '''UPDATE quantacts SET first=?,last=?,number=?, email=?, where variable_id=?''', 
