@@ -18,7 +18,7 @@ def insert(first,last,number, email):
     #query.format()
     #query = f'INSERT INTO ({first},{last},{number},{email}) VALUES (first, last, number, email)'
     #query.format( {first:'first'}, {last:'last'}, {number:'number'}, {email:'email'})
-    print(query)
+    #print(query)
     cur.execute(query)
     conn.commit()
     conn.close()
@@ -36,11 +36,11 @@ def view():
 def search(first,last,number, email):
     conn = mysql.connector.connect(database="mydb", user ="root", password = "password", host="localhost")
     cur = conn.cursor()
-    cur.execute(
-        '''SELECT * FROM quantact1 WHERE first=? OR last=? OR number=? OR email=?''', (first, last, number, email)
-   )
+    query = "SELECT * FROM quantact1 WHERE first='"+first+"' OR last='"+last+"' OR number='"+number+"' OR email='"+email+"'"
+    cur.execute(query)
     rows = cur.fetchall()
     conn.close()
+    return rows
     
 def delete(variable_id):
     conn = mysql.connector.connect(database="mydb", user ="root", password = "password", host="localhost")
