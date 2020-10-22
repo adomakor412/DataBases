@@ -12,7 +12,7 @@ def connect():
 def insert(first,last,number, email):
     conn = mysql.connector.connect(database="mydb", user ="root", password = "password", host="localhost")
     cur = conn.cursor()
-    query = f'INSERT INTO quantacts (first,last,number,email) VALUES ({first}, {last}, {number}, {email})'
+    query = f'INSERT INTO (first,last,number,email) VALUES ({first}, {last}, {number}, {email})'
     query.format( {first:'first'}, {last:'last'}, {number:'number'}, {email:'email'})
     cur.execute(query)
     conn.commit()
