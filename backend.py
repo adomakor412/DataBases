@@ -10,6 +10,15 @@ def initiateTable():
     ''')
     conn.commit()
     conn.close()
+    
+def search(first,last,number, email):
+    conn = mysql.connector.connect(database="mydb", user ="root", password = "password", host="localhost")
+    cur = conn.cursor()
+    query = "SELECT * FROM quantact1 WHERE first='"+str(first)+"' OR last='"+str(last)+"' OR number='"+str(number)+"' OR email='"+str(email)+"'"
+    cur.execute(query)
+    rows = cur.fetchall()
+    conn.close()
+    return rows
 
 def insert(first,last,number, email):
     conn = mysql.connector.connect(database="mydb", user ="root", password = "password", host="localhost")
@@ -22,6 +31,7 @@ def insert(first,last,number, email):
     cur.execute(query)
     conn.commit()
     conn.close()
+    return search(first,last,number, email)
     
 def view():
     conn = mysql.connector.connect(database="mydb", user ="root", password = "password", host="localhost")
@@ -33,14 +43,7 @@ def view():
     conn.close()
     return rows
     
-def search(first,last,number, email):
-    conn = mysql.connector.connect(database="mydb", user ="root", password = "password", host="localhost")
-    cur = conn.cursor()
-    query = "SELECT * FROM quantact1 WHERE first='"+first+"' OR last='"+last+"' OR number='"+number+"' OR email='"+email+"'"
-    cur.execute(query)
-    rows = cur.fetchall()
-    conn.close()
-    return rows
+
     
 def delete(variable_id):
     conn = mysql.connector.connect(database="mydb", user ="root", password = "password", host="localhost")
