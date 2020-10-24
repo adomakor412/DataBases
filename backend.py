@@ -43,7 +43,6 @@ def view():
     conn.close()
     return rows
     
-
     
 def delete(variable_id):
     conn = mysql.connector.connect(database="mydb", user ="root", password = "password", host="localhost")
@@ -57,9 +56,8 @@ def delete(variable_id):
 def update(variable_id,first,last,number, email):
     conn = mysql.connector.connect(database="mydb", user ="root", password = "password", host="localhost")
     cur = conn.cursor()
-    cur.execute(
-        '''UPDATE quantact1 SET first=?,last=?,number=?, email=?, where variable_id=?''', 
-        (variable_id,first, last, number, email)
-   )
-    rows = cur.fetchall()
+    query = "UPDATE quantact1 SET first='"+first+"',last='"+last+"', number='"+number+"', email='"+email+"', where id='"+variable_id+"'"
+    cur.execute(query)
+    #rows = cur.fetchone()
     conn.close()
+    return search(first,last,number, email)
