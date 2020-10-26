@@ -18,8 +18,9 @@ def initiateTable():
 def search(first,last,number, email):
     conn = mysql.connector.connect(database="mydb", user ="root", password = "password", host="localhost")
     cur = conn.cursor()
-    query = "SELECT * FROM quantact WHERE first='"+str(first)+"' OR last='"+str(last)+"' OR number='"+str(number)+"' OR email='"+str(email)+"';"
-    cur.execute(query)
+    inputs = (first,last,number, email)
+    query = "SELECT * FROM quantact WHERE first=%s OR last=%s OR number=%s OR email=%s"
+    cur.execute(query, inputs)
     rows = cur.fetchall()
     conn.close()
     return rows
@@ -27,12 +28,9 @@ def search(first,last,number, email):
 def insert(first,last,number, email):
     conn = mysql.connector.connect(database="mydb", user ="root", password = "password", host="localhost")
     cur = conn.cursor()
-    query = "INSERT INTO quantact (first,last,number,email) VALUES ('" + first + "', '" + last + "', '" + str(number) + "', '" + email + "');"
-    #query.format()
-    #query = f'INSERT INTO ({first},{last},{number},{email}) VALUES (first, last, number, email)'
-    #query.format( {first:'first'}, {last:'last'}, {number:'number'}, {email:'email'})
-    #print(query)
-    cur.execute(query)
+    inputs = (first,last,number, email)
+    query = "INSERT INTO quantact (first,last,number,email) VALUES (%s,%s,%s,%s)"
+    execute = cur.execute(query,inputs) #Try not to rely on mysql.connector library to format strings
     conn.commit()
     conn.close()
     return search(first,last,number, email)
@@ -50,21 +48,21 @@ def view():
 def delete(variable_id):
     conn = mysql.connector.connect(database="mydb", user ="root", password = "password", host="localhost",buffered=True)
     cur = conn.cursor()
+    inputs = str(variable_id)
     query1= '''SELECT * FROM quantact;'''
-    query2 = "DELETE FROM quantact WHERE prime_id ="+str(variable_id)
+    query2 = "DELETE FROM quantact WHERE prime_id = %s"#The EXTENDED PYTHON FORMAT CODE vs tuple in mysql.connect
     cur.execute(query1)
-    cur.execute(query2)
-    #rows = cur.fetchall()
+    cur.execute((query2 %inputs))
     conn.commit()
     conn.close()
-    #print('Your are deleting contact: ', rows)
     return 
     
-def update(variable_id,first,last,number, email):
+def update(variable_id, first, last, number, email):
     conn = mysql.connector.connect(database="mydb", user ="root", password = "password", host="localhost",buffered=True)
     cur = conn.cursor()
-    query = "UPDATE quantact SET first='"+first+"',last='"+last+"', number='"+number+"', email='"+email+"' where prime_id = "+str(variable_id)+";"
-    cur.execute(query)
+    inputs = (first, last, number, email, str(variable_id))
+    query = "UPDATE quantact SET first= %s,last= %s, number= %s, email= %s where prime_id = %s "
+    cur.execute(query %inputs)
     #rows = cur.fetchone()
     conn.commit()
     conn.close()
