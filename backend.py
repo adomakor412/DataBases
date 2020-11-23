@@ -30,9 +30,9 @@ def insert(first,last,number, email):
     cur = conn.cursor()
     inputs = (first,last,number, email)
     #query = "INSERT INTO quantact (first,last,number,email) VALUES (%s,%s,%s,%s)"
-    query = "INSERT INTO quantact (first,last,number,email) VALUES ('%s','%s','%s','%s')"
+    query = "INSERT INTO quantact (first,last,number,email) VALUES (%s,%s,%s,%s)"
     #execute = cur.execute(query,inputs) #Try not to rely on mysql.connector library to format strings
-    execute = cur.execute((query %inputs))
+    execute = cur.execute(query, inputs)
     conn.commit()
     conn.close()
     return search(first,last,number, email)
@@ -54,7 +54,7 @@ def delete(variable_id):
     query1= '''SELECT * FROM quantact;'''
     query2 = "DELETE FROM quantact WHERE prime_id = %s"#The EXTENDED PYTHON FORMAT CODE vs tuple in mysql.connect
     cur.execute(query1)
-    cur.execute((query2 %inputs))#string formating needs tuple if not using function
+    cur.execute(query2, inputs)#string formating needs tuple if not using function
     conn.commit()
     conn.close()
     return 
@@ -63,8 +63,8 @@ def update(variable_id, first, last, number, email):
     conn = mysql.connector.connect(database="mydb", user ="root", password = "password", host="localhost",buffered=True)
     cur = conn.cursor()
     inputs = (first, last, number, email, str(variable_id))
-    query = "UPDATE quantact SET first= '%s',last= '%s', number= '%s', email= '%s' WHERE prime_id = %s;"
-    cur.execute((query %inputs))
+    query = "UPDATE quantact SET first= %s,last= %s, number= %s, email= %s WHERE prime_id = %s;"
+    cur.execute(query,inputs)
     conn.commit()
     conn.close()
     return search(first,last,number, email)
