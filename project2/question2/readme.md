@@ -4,8 +4,8 @@ Create a database containing the following table:
 CREATE TABLE Comments(
     id INT PRIMARY KEY,
     parent INT,
-    text VARCHAR(255)
-    FOREIGN KEY (parent) REFERENCES Comments(id);
+    text VARCHAR(255),
+    FOREIGN KEY (parent) REFERENCES Comments(id));
 ```
 
 The table stores comments made on a social media website, where comments are limited in length to only 255 bytes.
